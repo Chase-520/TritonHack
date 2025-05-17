@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discussion Forum</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        #forum-container {
+            width: 600px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        h1 {
+            background-color: #007acc;
+            color: white;
+            margin: 0;
+            padding: 15px;
+            text-align: center;
+        }
+        #post-form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 15px;
+        }
+        #post-form input, #post-form textarea {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #007acc;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #005f99;
+        }
+        #posts {
+            border-top: 1px solid #eee;
+            padding: 15px;
+        }
+        .post {
+            margin-bottom: 15px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        .post h3 {
+            margin: 0;
+            color: #007acc;
+        }
+        .post p {
+            margin: 5px 0 0 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="forum-container">
+        <h1>Discussion Forum</h1>
+
+        <div id="post-form">
+            <input type="text" id="username" placeholder="Your Name">
+            <textarea id="post-content" placeholder="Share your thoughts..."></textarea>
+            <button onclick="submitPost()">Post</button>
+        </div>
+
+        <div id="posts">
+            <!-- Forum posts will appear here -->
+        </div>
+    </div>
+
+    <script>
+        function submitPost() {
+            const username = document.getElementById('username').value.trim();
+            const content = document.getElementById('post-content').value.trim();
+
+            if (!username || !content) {
+                alert('Please fill out both fields.');
+                return;
+            }
+
+            const postContainer = document.createElement('div');
+            postContainer.classList.add('post');
+
+            const author = document.createElement('h3');
+            author.textContent = username;
+
+            const message = document.createElement('p');
+            message.textContent = content;
+
+            postContainer.appendChild(author);
+            postContainer.appendChild(message);
+
+            document.getElementById('posts').prepend(postContainer);
+
+            document.getElementById('username').value = '';
+            document.getElementById('post-content').value = '';
+        }
+    </script>
+</body>
+</html>

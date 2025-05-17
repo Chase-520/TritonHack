@@ -1,71 +1,69 @@
 import os
-import tempfile
+import threading
+import queue
 import speech_recognition as sr
 from pydub import AudioSegment
 
-# Manually specify ffmpeg and ffprobe locations
+# Optional: Set ffmpeg path if using mp3 (not needed for microphone)
 AudioSegment.converter = r"C:\ffmpeg\bin\ffmpeg.exe"
 AudioSegment.ffprobe = r"C:\ffmpeg\bin\ffprobe.exe"
 
-class SpeechToText:
+class LiveSpeechToText:
     def __init__(self):
         self.recognizer = sr.Recognizer()
+        self.audio_queue = queue.Queue()
+        self.text_queue = queue.Queue(maxsize=10)
+        self.stop_event = threading.Event()
 
-    def mp3_to_wav(self, mp3_path: str, duration_sec: int = None) -> str:
-        audio = AudioSegment.from_mp3(mp3_path)
-        if duration_sec:
-            audio = audio[:duration_sec * 1000]
-        temp_wav_path = tempfile.mktemp(suffix=".wav")
-        audio.export(temp_wav_path, format="wav")
-        return temp_wav_path
-
-    def transcribe(self, audio_path: str, duration_sec: int = 15) -> str:
-        wav_path = self.mp3_to_wav(audio_path, duration_sec)
-        try:
-            with sr.AudioFile(wav_path) as source:
-                audio_data = self.recognizer.record(source)
-                return self.recognizer.recognize_google(audio_data)
-        except sr.UnknownValueError:
-            return "[Unrecognized speech]"
-        except sr.RequestError as e:
-            return f"[API error: {e}]"
-        finally:
-            os.remove(wav_path)
-
-    def live_transcribe(self, timeout: int = 5, phrase_time_limit: int = 5):
-        """
-        Live speech-to-text from the microphone.
-        timeout: how long to wait for phrase start (seconds)
-        phrase_time_limit: max seconds to listen per phrase
-        """
+    def listen_loop(self):
         with sr.Microphone() as source:
-            print("Adjusting for ambient noise, please wait...")
             self.recognizer.adjust_for_ambient_noise(source, duration=1)
-            print("Ready to transcribe. Speak now!")
+            print("[Listener] Listening started...")
 
+            while not self.stop_event.is_set():
+                try:
+                    audio = self.recognizer.listen(source, timeout=None, phrase_time_limit=None)
+                    self.audio_queue.put(audio)
+                except Exception as e:
+                    print(f"[Listener] Error: {e}")
+
+    def process_loop(self):
+        print("[Processor] Waiting for audio...")
+        while not self.stop_event.is_set() or not self.audio_queue.empty():
             try:
-                audio_data = self.recognizer.listen(source, timeout=timeout, phrase_time_limit=phrase_time_limit)
-                print("Processing audio...")
-                text = self.recognizer.recognize_google(audio_data)
-                return text
-            except sr.WaitTimeoutError:
-                return "[No speech detected - timeout]"
+                audio = self.audio_queue.get(timeout=1)
+                text = self.recognizer.recognize_google(audio)
+                self.text_queue.put(text, block=False)
+                print("[Transcript]", text)
+            except queue.Empty:
+                continue
             except sr.UnknownValueError:
-                return "[Could not understand speech]"
+                print("[Transcript] [Could not understand speech]")
             except sr.RequestError as e:
-                return f"[API error: {e}]"
+                print(f"[Transcript] [API error: {e}]")
+    def getSentencce(self):
+        return self.text_queue.get()
+    
+    def hasSentence(self):
+        return not self.text_queue.empty()
+    
+    def start(self):
+        self.listener_thread = threading.Thread(target=self.listen_loop)
+        self.processor_thread = threading.Thread(target=self.process_loop)
+
+        self.listener_thread.start()
+        self.processor_thread.start()
+
+    def stop(self):
+        self.stop_event.set()
+        self.listener_thread.join()
+        self.processor_thread.join()
+        print("[System] Stopped cleanly.")
 
 if __name__ == "__main__":
-    stt = SpeechToText()
-
-    # Offline file transcription example
-    mp3_path = r"C:\Users\TEMP.AD.000\Downloads\President John F. Kennedy's _Peace Speech_.mp3"
-    result = stt.transcribe(mp3_path, duration_sec=15)
-    print("Transcription (First 15 seconds):")
-    print(result)
-
-    # Live microphone transcription example
-    print("\nNow starting live transcription from microphone...")
-    live_result = stt.live_transcribe(timeout=5, phrase_time_limit=7)
-    print("Live Transcription:")
-    print(live_result)
+    stt = LiveSpeechToText()
+    try:
+        stt.start()
+        input("\nPress ENTER to stop...\n")
+    finally:
+        stt.stop()

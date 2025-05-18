@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  	<meta charset="utf-8">
+  	<meta name="viewport" content="initial-scale=1, width=device-width">
+  	
+  	<link rel="stylesheet"  href="./HomePage.css" />
+  	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400&display=swap" />
+  	
+  	
+  	
+</head>
+<body bgColor = "EFB9E9">
+  	
+  	<div class="frame-parent">
+    		<div class="tab-resources-parent">
+      			<div class="tab-resources" id="tabResources">
+        				<img class="union-icon" alt="" src="Union.svg">
+        				
+        				<div class="resources">Resources</div>
+      			</div>
+      			<div class="tab-resources" id="tabResources1">
+        				<img class="union-icon" alt="" src="Union.svg">
+        				
+        				<div class="resources">Support Groups</div>
+      			</div>
+      			<div class="tab-resources" id="tabResources2">
+        				<img class="union-icon" alt="" src="Union.svg">
+        				
+        				<div class="resources">Support Forums</div>
+      			</div>
+    		</div>
+    		<div class="feeling-stressed-talk-container">
+      			<span class="feeling-stressed-talk-container1">
+        				<p class="feeling-stressed">Feeling Stressed?</p>
+        				<p class="feeling-stressed">Talk to an AI Assistant</p>
+      			</span>
+    		</div>
+    		<div class="tap-to-talk">Tap to Talk</div>
+    		<img class="mic-button-icon" alt="" src="Mic Button.svg">
+    		
+  	</div>
+  	
+  	
+  	
+  	
+  	<script>
+    		var tabResources = document.getElementById("tabResources");
+    		if(tabResources) {
+      			tabResources.addEventListener("click", function (e) {
+        				window.location.href = "ResourcePage.html";
+      			});
+    		}
+    		
+    		var tabResources1 = document.getElementById("tabResources1");
+    		if(tabResources1) {
+      			tabResources1.addEventListener("click", function (e) {
+        				window.location.href = "SupportGroupsPage.html";
+      			});
+    		}
+    		
+    		var tabResources2 = document.getElementById("tabResources2");
+    		if(tabResources2) {
+      			tabResources2.addEventListener("click", function (e) {
+        				window.location.href = "SupportForumsPage.html";
+      			});
+    		}</script></body>
+</html>

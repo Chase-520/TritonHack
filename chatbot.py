@@ -11,11 +11,10 @@ class Gemini:
         "Once you understand more about the problems they are facing, diagnose them and suggest treatment options.Here's the conversation: \n"
 
 
-    def generate_text(self, prompt: str, model: str = "gemini-2.0-flash") -> str:
-        
+    def generate_text(self, prompt: str, model: str = "gemini-2.0-flash",history: list=[]) -> str:
         response = self.client.models.generate_content(
             model=model,
-            contents=f"{self.initprompt} {self.inputQueue}" ,
+            contents=f"{self.initprompt}\nhistory conversation: {history}\nuser:{prompt}",
         )
         self.inputQueue.append({"user":prompt,"gemini":response.text})
         return response.text

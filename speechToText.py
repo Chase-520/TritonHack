@@ -28,6 +28,17 @@ class LiveSpeechToText:
                 except Exception as e:
                     print(f"[Listener] Error: {e}")
 
+    def transcribe_file(self, filepath):
+        with sr.AudioFile(filepath) as source:
+            audio = self.recognizer.record(source)
+            try:
+                text = self.recognizer.recognize_google(audio)
+                return text
+            except sr.UnknownValueError:
+                return "[Could not understand speech]"
+            except sr.RequestError as e:
+                return f"[API error: {e}]"
+
     def process_callback(self, audio):
         try:
             text = self.recognizer.recognize_google(audio)

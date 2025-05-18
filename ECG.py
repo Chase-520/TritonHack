@@ -2,6 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.signal import find_peaks
 
+#Chatgpt prompt used: using simulated ECG data create a program that uses Heart Rate Variability (HRV) to determine weather the user is having a panic attack
+
 class ECGSimulator:
     def __init__(self, rr_intervals=None, rr_count=10, sampling_rate=1000):
         self.rr_count = rr_count

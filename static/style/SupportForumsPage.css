@@ -1,0 +1,46 @@
+.union-icon {
+  	position: relative;
+  	width: 292px;
+  	height: 141px;
+}
+.resources {
+  	position: absolute;
+  	width: 94.46%;
+  	top: 50.31%;
+  	left: 0.65%;
+  	letter-spacing: -0.03em;
+  	line-height: 100%;
+  	display: flex;
+  	align-items: center;
+  	justify-content: center;
+}
+.tab-resources {
+  	width: 307px;
+  	position: relative;
+  	filter: drop-shadow(5px 10px 3px #563c8b);
+  	height: 159px;
+  	cursor: pointer;
+}
+.tab-resources-parent {
+  	position: absolute;
+  	top: 0px;
+  	left: 0px;
+  	width: 1563px;
+  	display: flex;
+  	flex-direction: row;
+  	align-items: flex-start;
+  	justify-content: flex-end;
+  	gap: 29px;
+}
+.support-forums-page {
+  	width: 100%;
+  	position: relative;
+  	background-color: #efb9e9;
+  	height: 761px;
+  	overflow: hidden;
+  	text-align: center;
+  	font-size: 30px;
+  	color: #b855c5;
+  	font-family: Comfortaa;
+}
+

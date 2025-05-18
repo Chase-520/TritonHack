@@ -1,46 +1,71 @@
-.union-icon {
-  	position: relative;
-  	width: 292px;
-  	height: 141px;
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
-.resources {
-  	position: absolute;
-  	width: 94.46%;
-  	top: 50.31%;
-  	left: 0.65%;
-  	letter-spacing: -0.03em;
-  	line-height: 100%;
-  	display: flex;
-  	align-items: center;
-  	justify-content: center;
+#forum-container {
+    width: 30%;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    margin-right: 5px;
 }
-.tab-resources {
-  	width: 307px;
-  	position: relative;
-  	filter: drop-shadow(5px 10px 3px #563c8b);
-  	height: 159px;
-  	cursor: pointer;
+h1 {
+    background-color: #A0C1BB;
+    color: white;
+    margin: 0;
+    padding: 15px;
+    text-align: center;
 }
-.tab-resources-parent {
-  	position: absolute;
-  	top: 0px;
-  	left: 0px;
-  	width: 1563px;
-  	display: flex;
-  	flex-direction: row;
-  	align-items: flex-start;
-  	justify-content: flex-end;
-  	gap: 29px;
+#post-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 15px;
 }
-.support-forums-page {
-  	width: 100%;
-  	position: relative;
-  	background-color: #efb9e9;
-  	height: 761px;
-  	overflow: hidden;
-  	text-align: center;
-  	font-size: 30px;
-  	color: #b855c5;
-  	font-family: Comfortaa;
+#post-form input, #post-form textarea {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
 }
-
+button {
+    background-color: #A0C1BB;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+button:hover {
+    background-color: #4ec2ad;
+}
+#posts {
+    padding: 15px;
+    width: 70%;
+    height: 400px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    overflow: auto;
+    max-height: 350px;
+}
+.post {
+    margin-bottom: 15px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+.post h3 {
+    margin: 0;
+    color: #A0C1BB;
+    font-family: Arial
+}
+.post p {
+    margin: 5px 0 0 0;
+}

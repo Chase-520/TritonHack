@@ -1,84 +1,85 @@
-import asyncio
-import os
-import pyaudio
-from deepgram import DeepgramClient, LiveTranscriptionEvents, LiveOptions
-from dotenv import load_dotenv
+import tkinter as tk
+import sounddevice as sd
+from scipy.io.wavfile import write
+import threading
+import numpy as np
+import time
+from speechToText import LiveSpeechToText  # <- Replace with your actual import
+from textToSpeech import TextToSpeech  # <- Replace with your actual import
+from chatbot import Gemini  # <- Replace with your actual import
+# Globals
+recording = False
+fs = 44100  # Sample rate
+audio_data = []
+converter = LiveSpeechToText()
+speaker = TextToSpeech()
+bot  = Gemini()
+history = []
+def record_audio():
+    global recording, audio_data
+    audio_data = []
 
-# Load environment variables from .env file
-load_dotenv()
-DEEPGRAM_API_KEY = "73b8b9646f15c71d594cf57ffbd85d0532712a12"
+    def callback(indata, frames, time, status):
+        if recording:
+            audio_data.append(indata.copy())
 
-CHUNK = 1024
-FORMAT = pyaudio.paInt16
-CHANNELS = 1
-RATE = 16000
-TIMEOUT_SECONDS = 30
+    with sd.InputStream(callback=callback, channels=1, samplerate=fs):
+        while recording:
+            sd.sleep(100)
 
-async def transcribe_audio():
-    if not DEEPGRAM_API_KEY:
-        raise ValueError("DEEPGRAM_API_KEY is not set in the environment")
+    # After stopping, process audio
+    process_audio()
 
-    # Initialize Deepgram client
-    deepgram = DeepgramClient(DEEPGRAM_API_KEY)
+def start_recording():
+    global recording
+    recording = True
+    status_label.config(text="Recording...")
+    threading.Thread(target=record_audio).start()
 
-    # Create websocket connection to Deepgram live transcription
-    dg_connection = deepgram.listen.websocket.v("1")
+def stop_recording():
+    global recording
+    recording = False
+    status_label.config(text="Stopped and processing...")
 
-    # Define callback to print transcriptions
-    def on_message(self, result, **kwargs):
-        transcript = result.channel.alternatives[0].transcript
-        if transcript.strip():
-            print(f"Transcript: {transcript}")
+def process_audio():
+    if not audio_data:
+        status_label.config(text="No audio data recorded.")
+        return
 
-    def on_open(self, open, **kwargs):
-        print("Connection opened")
+    final_audio = np.concatenate(audio_data, axis=0)
 
-    def on_error(self, error, **kwargs):
-        print(f"Error: {error}")
+    # Convert float32 [-1, 1] to int16 PCM
+    int_audio = np.int16(final_audio * 32767)
+    write("recorded_audio.wav", fs, int_audio)
+    print("Audio saved to 'recorded_audio.wav'")
 
-    # Register callbacks
-    dg_connection.on(LiveTranscriptionEvents.Transcript, on_message)
-    dg_connection.on(LiveTranscriptionEvents.Open, on_open)
-    dg_connection.on(LiveTranscriptionEvents.Error, on_error)
+    duration = len(final_audio) / fs
+    print(f"Recorded Duration: {duration:.2f} seconds")
 
-    # Configure transcription options
-    options = LiveOptions(
-        model="nova-3",
-        language="en",
-        smart_format=True,
-        encoding="linear16",
-        channels=1,
-        sample_rate=RATE
-    )
-
-    # Start the websocket connection
-    dg_connection.start(options)
-
-    # Setup PyAudio to read from mic
-    audio = pyaudio.PyAudio()
-    stream = audio.open(format=FORMAT, channels=CHANNELS, rate=RATE, input=True, frames_per_buffer=CHUNK)
-
-    print("Listening... Speak into your microphone.")
-
+    # Speech-to-text
     try:
-        async def stream_audio():
-            while True:
-                data = stream.read(CHUNK, exception_on_overflow=False)
-                dg_connection.send(data)
-                await asyncio.sleep(0.01)
+        transcript = converter.transcribe_file("recorded_audio.wav")
+    except Exception as e:
+        transcript = f"[Error] {e}"
+        
+    response = bot.generate_text(transcript,history=history)
+    status_label.config(text=f"Saved! Duration: {duration:.2f} sec")
+    contextlabel.config(text=f"Transcript:\n{transcript}\nResponse:\n{response}")
+    speaker.speak(response)
+    history.append({"user": transcript, "bot":response})
 
-        # Run audio streaming for TIMEOUT_SECONDS seconds
-        await asyncio.wait_for(stream_audio(), timeout=TIMEOUT_SECONDS)
+    
 
-    except asyncio.TimeoutError:
-        print("\nTimeout reached, stopping...")
-    except KeyboardInterrupt:
-        print("\nStopped by user.")
-    finally:
-        dg_connection.finish()
-        stream.stop_stream()
-        stream.close()
-        audio.terminate()
 
-if __name__ == "__main__":
-    asyncio.run(transcribe_audio())
+# === Tkinter UI ===
+root = tk.Tk()
+root.title("Mic Recorder")
+
+tk.Button(root, text="Start Recording", command=start_recording).pack(pady=10)
+tk.Button(root, text="Stop Recording", command=stop_recording).pack(pady=10)
+contextlabel = tk.Label(root, text="text",wraplength=500, justify="left", bg="white")
+contextlabel.pack(pady=5)
+status_label = tk.Label(root, text="Ready")
+status_label.pack(pady=5)
+
+root.mainloop()

@@ -1,84 +1,114 @@
 import tkinter as tk
+from PIL import Image, ImageTk
 import sounddevice as sd
 from scipy.io.wavfile import write
 import threading
 import numpy as np
+from speechToText import LiveSpeechToText
+from textToSpeech import TextToSpeech
+from chatbot import Gemini
 import time
-from speechToText import LiveSpeechToText  # <- Replace with your actual import
-from textToSpeech import TextToSpeech  # <- Replace with your actual import
-from chatbot import Gemini  # <- Replace with your actual import
-# Globals
-recording = False
-fs = 44100  # Sample rate
-audio_data = []
-converter = LiveSpeechToText()
-speaker = TextToSpeech()
-bot  = Gemini()
-history = []
-def record_audio():
-    global recording, audio_data
-    audio_data = []
 
-    def callback(indata, frames, time, status):
-        if recording:
-            audio_data.append(indata.copy())
+class VoiceAssistantApp:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("AI Voice Assistant")
+        self.root.geometry("600x400")
 
-    with sd.InputStream(callback=callback, channels=1, samplerate=fs):
-        while recording:
-            sd.sleep(100)
+        # App state
+        self.recording = False
+        self.fs = 44100
+        self.audio_data = []
+        self.history = []
 
-    # After stopping, process audio
-    process_audio()
+        # Components
+        self.converter = LiveSpeechToText()
+        self.speaker = TextToSpeech()
+        self.bot = Gemini()
 
-def start_recording():
-    global recording
-    recording = True
-    status_label.config(text="Recording...")
-    threading.Thread(target=record_audio).start()
+        # Load and resize background image (use new Pillow API)
+        self.bg_image = Image.open("bgF.png")
+        self.bg_image = self.bg_image.resize((600, 400), Image.Resampling.LANCZOS)
+        self.bg_photo = ImageTk.PhotoImage(self.bg_image)
 
-def stop_recording():
-    global recording
-    recording = False
-    status_label.config(text="Stopped and processing...")
+        # Setup Canvas with background image
+        self.canvas = tk.Canvas(self.root, width=600, height=400)
+        self.canvas.pack(fill="both", expand=True)
+        self.canvas.create_image(0, 0, image=self.bg_photo, anchor="nw")
+        self.canvas.bg_photo = self.bg_photo  # Keep reference to prevent GC
 
-def process_audio():
-    if not audio_data:
-        status_label.config(text="No audio data recorded.")
-        return
+        # UI Elements
+        self.start_button = tk.Button(self.root, text="Start Recording", command=self.start_recording)
+        self.stop_button = tk.Button(self.root, text="Stop Recording", command=self.stop_recording)
+        self.context_label = tk.Label(self.root, text=" ", wraplength=500, justify="left", bg="white")
 
-    final_audio = np.concatenate(audio_data, axis=0)
+        # Place UI elements on canvas
+        self.canvas.create_window(200, 250, window=self.start_button)
+        self.canvas.create_window(400, 250, window=self.stop_button)
+        self.canvas.create_window(300, 330, window=self.context_label)
 
-    # Convert float32 [-1, 1] to int16 PCM
-    int_audio = np.int16(final_audio * 32767)
-    write("recorded_audio.wav", fs, int_audio)
-    print("Audio saved to 'recorded_audio.wav'")
+    def record_audio(self):
+        self.audio_data = []
 
-    duration = len(final_audio) / fs
-    print(f"Recorded Duration: {duration:.2f} seconds")
+        def callback(indata, frames, time, status):
+            if self.recording:
+                self.audio_data.append(indata.copy())
 
-    # Speech-to-text
-    try:
-        transcript = converter.transcribe_file("recorded_audio.wav")
-    except Exception as e:
-        transcript = f"[Error] {e}"
-    response = bot.generate_text(transcript,history=history)
-    status_label.config(text=f"Saved! Duration: {duration:.2f} sec")
-    contextlabel.config(text=f"Transcript:\n{transcript}\nResponse:\n{response}")
-    speaker.speak(response)
-    history.append({"user": transcript, "bot":response})
+        with sd.InputStream(callback=callback, channels=1, samplerate=self.fs):
+            while self.recording:
+                sd.sleep(100)
 
-    
+        # Once recording stops, process audio on the main thread via .after
+
+    def start_recording(self):
+        if self.recording:
+            return  # Already recording
+        self.recording = True
+        threading.Thread(target=self.record_audio, daemon=True).start()
+
+    def stop_recording(self):
+        if not self.recording:
+            return
+        self.recording = False
+        time.sleep(0.5)  # Give some time for the audio buffer to clear
+        self.process_audio()
+
+    def process_audio(self):
+        if not self.audio_data:
+            return
+
+        final_audio = np.concatenate(self.audio_data, axis=0)
+        int_audio = np.int16(final_audio * 32767)
+        write("recorded_audio.wav", self.fs, int_audio)
+
+        duration = len(final_audio) / self.fs
+        print(f"Recorded Duration: {duration:.2f} seconds")
+
+        try:
+            transcript = self.converter.transcribe_file("recorded_audio.wav")
+        except Exception as e:
+            transcript = f"[Error] {e}"
+
+        if transcript == "[Could not understand speech]":
+            self.speaker.speak("I am sorry, I didn't hear you, could you repeat that?")
+        else:
+            response = self.bot.generate_text(transcript, history=self.history)
+            self.context_label.config(text=f"Transcript:\n{transcript}\n\nResponse:\n{response}")
+            time.sleep(1)
+            self.speaker.speak(response)
+            self.history.append({"user": transcript, "bot": response})
 
 
-# === Tkinter UI ===
-root = tk.Tk()
-root.title("Mic Recorder")
+if __name__ == "__main__":
+    import sys
+    import traceback
 
-tk.Button(root, text="Start Recording", command=start_recording).pack(pady=10)
-tk.Button(root, text="Stop Recording", command=stop_recording).pack(pady=10)
-contextlabel = tk.Label(root, text="text")
-contextlabel.pack(pady=5)
-status_label = tk.Label(root, text="Ready")
-status_label.pack(pady=5)
+    def custom_excepthook(exc_type, exc_value, exc_traceback):
+        print("Uncaught exception:")
+        traceback.print_exception(exc_type, exc_value, exc_traceback)
 
-root.mainloop()
+    sys.excepthook = custom_excepthook
+
+    root = tk.Tk()
+    app = VoiceAssistantApp(root)
+    root.mainloop()

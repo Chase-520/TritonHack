@@ -1,3 +1,7 @@
+"""
+Prompt used:
+create a class to convert audio to text, fast response time is important.
+"""
 import os
 import threading
 import queue

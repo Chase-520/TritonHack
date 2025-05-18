@@ -1,3 +1,6 @@
+"""
+A test pipeline for chatbot feedback loop. No ai used
+"""
 from speechToText import LiveSpeechToText
 from chatbot import Gemini
 from textToSpeech import TextToSpeech

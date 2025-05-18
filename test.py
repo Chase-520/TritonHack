@@ -1,3 +1,8 @@
+"""
+prompt used:
+create a tkinter gui strcuture that can record audio from the mic using two buttons. I already have the audio processing code ready to go
+leave space for the processing funciton.
+"""
 import tkinter as tk
 import sounddevice as sd
 from scipy.io.wavfile import write
@@ -61,7 +66,7 @@ def process_audio():
         transcript = converter.transcribe_file("recorded_audio.wav")
     except Exception as e:
         transcript = f"[Error] {e}"
-        
+
     response = bot.generate_text(transcript,history=history)
     status_label.config(text=f"Saved! Duration: {duration:.2f} sec")
     contextlabel.config(text=f"Transcript:\n{transcript}\nResponse:\n{response}")

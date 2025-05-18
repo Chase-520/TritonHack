@@ -1,3 +1,6 @@
+"""
+Not used due to high latency and lack of multi-threading
+"""
 import tkinter as tk
 from PIL import Image, ImageTk
 import sounddevice as sd

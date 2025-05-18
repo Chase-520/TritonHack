@@ -1,3 +1,7 @@
+"""
+source: https://ai.google.dev/gemini-api/docs/quickstart?lang=python
+"""
+
 import google
 from google import genai
 import queue

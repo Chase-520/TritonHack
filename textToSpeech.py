@@ -1,3 +1,8 @@
+"""
+This script is build by using elevenlabs and chat gpt
+prompt used:
+Create a text to speech class using elevenlabs api.
+"""
 # sk_a52a3f251f764099b0e6aadd664150de81630069dad93ec6
 from dotenv import load_dotenv
 from elevenlabs.client import ElevenLabs

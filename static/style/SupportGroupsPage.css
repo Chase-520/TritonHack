@@ -199,6 +199,15 @@
   	width: 1px;
   	height: 19px;
 }
+.tab-resources6 {
+  	position: absolute;
+  	top: 0px;
+  	left: 248px;
+  	filter: drop-shadow(5px 10px 3px #563c8b);
+  	width: 307px;
+  	height: 159px;
+  	cursor: pointer;
+}
 .support-groups-page {
   	width: 100%;
   	position: relative;

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1, width=device-width">
+  
+  <link rel="stylesheet" href="./PhysicalStressMonitorPage.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400&display=swap">
+  
+  <title>Physical Stress Monitor</title>
+</head>
+<body>
+  <div class="physical-stress-monitor-page">
+    <div class="tab-resources-parent">
+      <div class="tab-resources" id="tabResources">
+        <img class="union-icon" alt="" src="Union.svg">
+        <div class="resources">Home</div>
+      </div>
+      <div class="tab-resources" id="tabResources1">
+        <img class="union-icon" alt="" src="Union.svg">
+        <div class="resources">Resources</div>
+      </div>
+      <div class="tab-resources" id="tabResources2">
+        <img class="union-icon" alt="" src="Union.svg">
+        <div class="resources">Support Groups</div>
+      </div>
+      <div class="tab-resources" id="tabResources3">
+        <img class="union-icon" alt="" src="Union.svg">
+        <div class="resources">Support Forums</div>
+      </div>
+    </div>
+
+    <div class="connect" id="connectContainer">
+      <div class="connect-child"></div>
+      <div class="connect-devices">
+        <span class="connect-devices-txt-container">
+          <p class="devices">Connect</p>
+          <p class="devices">Devices</p>
+        </span>
+      </div>
+    </div>
+
+    <!-- Heart Rate Section -->
+    <div class="physical-stress-monitor-page-child hidden" id="heartRateBox"></div>
+    <div class="heart-rate hidden" id="heartRate">
+      <span class="connect-devices-txt-container">
+        <p class="devices">Heart</p>
+        <p class="devices">Rate</p>
+      </span>
+    </div>
+    <div class="number hidden" id="heartRateNumber">[Number]</div>
+
+    <!-- Blood Pressure Section -->
+    <div class="physical-stress-monitor-page-item hidden" id="bloodPressureBox"></div>
+    <div class="blood-pressure hidden" id="bloodPressure">
+      <span class="connect-devices-txt-container">
+        <p class="devices">Blood</p>
+        <p class="devices">Pressure</p>
+      </span>
+    </div>
+    <div class="number1 hidden" id="bloodPressureNumber">[Number]</div>
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    // Navigation Links
+    document.getElementById("tabResources")?.addEventListener("click", () => {
+      window.location.href = "HomePage.html";
+    });
+    document.getElementById("tabResources1")?.addEventListener("click", () => {
+      window.location.href = "ResourcePage.html";
+    });
+    document.getElementById("tabResources2")?.addEventListener("click", () => {
+      window.location.href = "SupportGroupsPage.html";
+    });
+    document.getElementById("tabResources3")?.addEventListener("click", () => {
+      window.location.href = "SupportForumsPage.html";
+    });
+
+    // Connect Devices Logic
+    document.getElementById("connectContainer")?.addEventListener("click", () => {
+      document.getElementById("heartRate")?.classList.remove("hidden");
+      document.getElementById("heartRateNumber")?.classList.remove("hidden");
+      document.getElementById("bloodPressure")?.classList.remove("hidden");
+      document.getElementById("bloodPressureNumber")?.classList.remove("hidden");
+      document.getElementById("heartRateBox")?.classList.remove("hidden");
+      document.getElementById("bloodPressureBox")?.classList.remove("hidden");
+    });
+  </script>
+</body>
+</html>

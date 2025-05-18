@@ -6,7 +6,7 @@
 .resources {
   	position: absolute;
   	width: 94.46%;
-  	top: 50.31%;
+  	top: 40.88%;
   	left: 0.65%;
   	letter-spacing: -0.03em;
   	line-height: 100%;
@@ -20,6 +20,17 @@
   	filter: drop-shadow(5px 10px 3px #563c8b);
   	height: 159px;
   	cursor: pointer;
+}
+.resources1 {
+  	position: absolute;
+  	width: 94.46%;
+  	top: 50.31%;
+  	left: 0.65%;
+  	letter-spacing: -0.03em;
+  	line-height: 100%;
+  	display: flex;
+  	align-items: center;
+  	justify-content: center;
 }
 .tab-resources-parent {
   	position: absolute;
@@ -50,18 +61,7 @@
   	width: 1px;
   	height: 21px;
 }
-.resources3 {
-  	position: absolute;
-  	width: 94.46%;
-  	top: 40.88%;
-  	left: 0.65%;
-  	letter-spacing: -0.03em;
-  	line-height: 100%;
-  	display: flex;
-  	align-items: center;
-  	justify-content: center;
-}
-.tab-resources3 {
+.tab-resources4 {
   	position: absolute;
   	height: 28.44%;
   	width: 98.71%;

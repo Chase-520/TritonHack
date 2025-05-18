@@ -1,59 +1,57 @@
+<!--ChatGPT Prompt: create a discussion forum using html css and js
+
+lots of the format was changed, I used the ChatGPT prompt for the JS code at the bottom and for the HTML and CSS for forum-container and posts
+Rest of the the formatting and some structure was changed by me-->
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  	<meta charset="utf-8">
-  	<meta name="viewport" content="initial-scale=1, width=device-width">
-  	
-  	<link rel="stylesheet"  href="./SupportForumsPage.css" />
-  	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400&display=swap" />
-  	
-  	
-  	
+    <link rel="stylesheet" href="./SupportForumsPage.css"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community for Help</title>
 </head>
-<body>
-  	
-  	<div class="support-forums-page">
-    		<div class="tab-resources-parent">
-      			<div class="tab-resources" id="tabResources">
-        				<img class="union-icon" alt="" src="Union.svg">
-        				
-        				<div class="resources">Home</div>
-      			</div>
-      			<div class="tab-resources" id="tabResources1">
-        				<img class="union-icon" alt="" src="Union.svg">
-        				
-        				<div class="resources">Resources</div>
-      			</div>
-      			<div class="tab-resources" id="tabResources2">
-        				<img class="union-icon" alt="" src="Union.svg">
-        				
-        				<div class="resources">Support Groups</div>
-      			</div>
-    		</div>
-  	</div>
-  	
-  	
-  	
-  	
-  	<script>
-    		var tabResources = document.getElementById("tabResources");
-    		if(tabResources) {
-      			tabResources.addEventListener("click", function (e) {
-        				window.location.href = "HomePage.html";
-      			});
-    		}
-    		
-    		var tabResources1 = document.getElementById("tabResources1");
-    		if(tabResources1) {
-      			tabResources1.addEventListener("click", function (e) {
-        				window.location.href = "ResourcePage.html";
-      			});
-    		}
-    		
-    		var tabResources2 = document.getElementById("tabResources2");
-    		if(tabResources2) {
-      			tabResources2.addEventListener("click", function (e) {
-        				window.location.href = "SupportGroupsPage.html";
-      			});
-    		}</script></body>
+<body style="background: #EFB9E9;">
+    <div id="forum-container">
+        <h1 style="font-family: Arial">Share Your Thoughts Here!</h1>
+        <div id="post-form">
+            <input type="text" style="font-family: Arial" id="username" placeholder="Topic">
+            <textarea style="font-family: Arial" id="post-content" placeholder="What's on your mind?"></textarea>
+            <button onclick="submitPost()">Post</button>
+        </div>
+
+    </div>
+  
+    <div id="posts">
+      <!-- Forum posts will appear here -->
+    </div>
+
+    <script>
+        function submitPost() {
+            const username = document.getElementById('username').value.trim();
+            const content = document.getElementById('post-content').value.trim();
+
+            if (!username || !content) {
+                alert('Please fill out both fields.');
+                return;
+            }
+
+            const postContainer = document.createElement('div');
+            postContainer.classList.add('post');
+
+            const author = document.createElement('h3');
+            author.textContent = username;
+
+            const message = document.createElement('p');
+            message.textContent = content;
+
+            postContainer.appendChild(author);
+            postContainer.appendChild(message);
+
+            document.getElementById('posts').prepend(postContainer);
+
+            document.getElementById('username').value = '';
+            document.getElementById('post-content').value = '';
+        }
+    </script>
+</body>
 </html>

@@ -22,11 +22,21 @@ class LiveSpeechToText:
 
             while not self.stop_event.is_set():
                 try:
-                    audio = self.recognizer.listen(source, timeout=None, phrase_time_limit=None)
-                    self.audio_queue.put(audio)
+                    audio = self.recognizer.listen(source, timeout=None, phrase_time_limit=5)
+                    #self.audio_queue.put(audio)
+                    self.process_callback(audio)
                 except Exception as e:
                     print(f"[Listener] Error: {e}")
 
+    def process_callback(self, audio):
+        try:
+            text = self.recognizer.recognize_google(audio)
+            self.text_queue.put(text, block=False)
+            print("[Transcript]", text)
+        except sr.UnknownValueError:
+            print("[Transcript] [Could not understand speech]")
+        except sr.RequestError as e:
+            print(f"[Transcript] [API error: {e}]")
     def process_loop(self):
         print("[Processor] Waiting for audio...")
         while not self.stop_event.is_set() or not self.audio_queue.empty():
@@ -49,15 +59,15 @@ class LiveSpeechToText:
     
     def start(self):
         self.listener_thread = threading.Thread(target=self.listen_loop)
-        self.processor_thread = threading.Thread(target=self.process_loop)
+        #self.processor_thread = threading.Thread(target=self.process_loop)
 
         self.listener_thread.start()
-        self.processor_thread.start()
+        #self.processor_thread.start()
 
     def stop(self):
         self.stop_event.set()
         self.listener_thread.join()
-        self.processor_thread.join()
+        #self.processor_thread.join()
         print("[System] Stopped cleanly.")
 
 if __name__ == "__main__":

@@ -1,24 +1,71 @@
-import google
-from google import genai
+import sounddevice as sd
+import numpy as np
+import tempfile
+import wave
+import threading
+import queue
+import time
+from faster_whisper import WhisperModel
 
-class Gemini:
-    def __init__(self, api_key: str):
-        self.client = genai.Client(api_key=api_key)
+# Load Whisper model (use "tiny" for faster performance)
+model = WhisperModel("tiny", compute_type="int8")  # "base", "small", etc. also available
 
-    def generate_text(self, prompt: str, model: str = "gemini-2.0-flash") -> str:
-        response = self.client.models.generate_content(
-            model=model,
-            contents=prompt,
-        )
-        return response.text
+# Audio recording settings
+samplerate = 16000  # Whisper expects 16kHz input
+channels = 1
+chunk_duration = 2  # Seconds
+audio_queue = queue.Queue()
 
+def record_audio():
+    """Record audio from microphone and add to queue."""
+    print("[System] Starting microphone...")
+    while True:
+        recording = sd.rec(int(chunk_duration * samplerate), samplerate=samplerate,
+                           channels=channels, dtype='int16')
+        sd.wait()
+        audio_queue.put(recording.copy())
+
+def transcribe_loop():
+    """Transcribe audio chunks using faster-whisper."""
+    print("[System] Starting transcription loop...")
+    while True:
+        print("[System] Listening...")
+        chunk = audio_queue.get()
+
+        # Save debug audio (optional, comment out if not needed)
+        with wave.open("debug.wav", 'wb') as wf:
+            wf.setnchannels(channels)
+            wf.setsampwidth(2)  # 16-bit PCM
+            wf.setframerate(samplerate)
+            wf.writeframes(chunk.tobytes())
+        print("[Debug] Saved chunk to debug.wav")
+
+        # Save to temp file and transcribe
+        with tempfile.NamedTemporaryFile(suffix=".wav", delete=True) as f:
+            with wave.open(f.name, 'wb') as wf:
+                wf.setnchannels(channels)
+                wf.setsampwidth(2)
+                wf.setframerate(samplerate)
+                wf.writeframes(chunk.tobytes())
+
+            segments, _ = model.transcribe(f.name, beam_size=5)
+
+            found = False
+            for segment in segments:
+                found = True
+                print("[Transcript]", segment.text)
+
+            if not found:
+                print("[Transcript] [No speech detected]")
 
 if __name__ == "__main__":
-    # Example usage:
-    api_key = "AIzaSyCMIJTLbBJ9xzEpaeP8YHdqpHstLDrcH38"  # Replace with your key or load from env
-    gemini = Gemini(api_key=api_key)
+    # Run threads for recording and transcription
+    threading.Thread(target=record_audio, daemon=True).start()
+    threading.Thread(target=transcribe_loop, daemon=True).start()
 
-    user_prompt = "Talk like an anime girl in japanese"
-    answer = gemini.generate_text(user_prompt)
-    print("Gemini response:")
-    print(answer)
+    print("Press Ctrl+C to stop...\n")
+    try:
+        while True:
+            time.sleep(1)
+    except KeyboardInterrupt:
+        print("\n[System] Exiting...")

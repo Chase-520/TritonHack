@@ -9,11 +9,12 @@ body {
     height: 100vh;
 }
 #forum-container {
-    width: 600px;
+    width: 30%;
     background-color: white;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     overflow: hidden;
+    margin-right: 5px;
 }
 h1 {
     background-color: #A0C1BB;
@@ -46,8 +47,14 @@ button:hover {
     background-color: #4ec2ad;
 }
 #posts {
-    border-top: 1px solid #eee;
     padding: 15px;
+    width: 70%;
+    height: 400px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    overflow: auto;
+    max-height: 350px;
 }
 .post {
     margin-bottom: 15px;

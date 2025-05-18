@@ -1,0 +1,146 @@
+.union-icon {
+  	position: relative;
+  	width: 292px;
+  	height: 141px;
+}
+.resources {
+  	position: absolute;
+  	width: 94.46%;
+  	top: 50.31%;
+  	left: 0.65%;
+  	letter-spacing: -0.03em;
+  	line-height: 100%;
+  	display: flex;
+  	align-items: center;
+  	justify-content: center;
+}
+.tab-resources {
+  	width: 307px;
+  	position: relative;
+  	filter: drop-shadow(5px 10px 3px #563c8b);
+  	height: 159px;
+  	cursor: pointer;
+}
+.tab-resources-parent {
+  	position: absolute;
+  	top: 0px;
+  	left: 0px;
+  	width: 1563px;
+  	display: flex;
+  	flex-direction: row;
+  	align-items: flex-start;
+  	justify-content: flex-end;
+  	gap: 29px;
+  	color: #b855c5;
+}
+.connect-child {
+  	position: absolute;
+  	top: 0px;
+  	left: 0px;
+  	background-color: #a0c1b8;
+  	width: 300px;
+  	height: 100px;
+}
+.devices {
+  	margin: 0;
+}
+.connect-devices-txt-container {
+  	line-break: anywhere;
+  	width: 100%;
+}
+.connect-devices {
+  	position: absolute;
+  	top: 25px;
+  	left: 35px;
+  	letter-spacing: -0.03em;
+  	line-height: 100%;
+  	display: flex;
+  	align-items: center;
+  	width: 230px;
+  	height: 50px;
+}
+.connect {
+  	position: absolute;
+  	top: 225px;
+  	left: 632px;
+  	width: 300px;
+  	height: 100px;
+  	cursor: pointer;
+}
+.physical-stress-monitor-page-child {
+  	position: absolute;
+  	top: 381px;
+  	left: 173px;
+  	background-color: #a0c1b8;
+  	width: 300px;
+  	height: 300px;
+}
+.physical-stress-monitor-page-item {
+  	position: absolute;
+  	top: 381px;
+  	left: 1110px;
+  	background-color: #a0c1b8;
+  	width: 300px;
+  	height: 300px;
+}
+.heart-rate {
+  	position: absolute;
+  	top: 417px;
+  	left: 208px;
+  	letter-spacing: -0.03em;
+  	line-height: 100%;
+  	display: flex;
+  	align-items: center;
+  	width: 230px;
+  	height: 50px;
+}
+.number {
+  	position: absolute;
+  	top: 509px;
+  	left: 208px;
+  	letter-spacing: -0.03em;
+  	line-height: 100%;
+  	display: flex;
+  	align-items: center;
+  	justify-content: center;
+  	width: 230px;
+  	height: 50px;
+}
+.number1 {
+  	position: absolute;
+  	top: 513px;
+  	left: 1145px;
+  	letter-spacing: -0.03em;
+  	line-height: 100%;
+  	display: flex;
+  	align-items: center;
+  	justify-content: center;
+  	width: 230px;
+  	height: 50px;
+}
+.blood-pressure {
+  	position: absolute;
+  	top: 421px;
+  	left: 1145px;
+  	letter-spacing: -0.03em;
+  	line-height: 100%;
+  	display: flex;
+  	align-items: center;
+  	width: 230px;
+  	height: 50px;
+}
+.physical-stress-monitor-page {
+  	width: 100%;
+  	position: relative;
+  	background-color: #efb9e9;
+  	height: 761px;
+  	overflow: hidden;
+  	text-align: center;
+  	font-size: 30px;
+  	color: #7e57c2;
+  	font-family: Comfortaa;
+}
+
+.hidden {
+  display: none;
+}

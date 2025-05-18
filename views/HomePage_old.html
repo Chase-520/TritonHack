@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1, width=device-width" />
+    
+    <title>Home Page</title>
+
+    <!-- Google Fonts -->
+    <link 
+        rel="stylesheet" 
+        href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400&display=swap" 
+    />
+
+    <!-- Local CSS -->
+    <link rel="stylesheet" href="/style/HomePage.css" />
+
+    <style>
+        body {
+            font-family: 'Comfortaa', cursive, sans-serif;
+            background-color: #EFB9E9;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="frame-parent">
+        <div class="tab-resources-parent">
+            <div class="tab-resources" id="tabResources" role="button" tabindex="0" aria-label="Go to Resources">
+                <img class="union-icon" alt="Resources Icon" src="/Union.svg" />
+                <div class="resources">Resources</div>
+            </div>
+            <div class="tab-resources" id="tabResources1" role="button" tabindex="0" aria-label="Go to Support Groups">
+                <img class="union-icon" alt="Support Groups Icon" src="/Union.svg" />
+                <div class="resources">Support Groups</div>
+            </div>
+            <div class="tab-resources" id="tabResources2" role="button" tabindex="0" aria-label="Go to Support Forums">
+                <img class="union-icon" alt="Support Forums Icon" src="/Union.svg" />
+                <div class="resources">Support Forums</div>
+            </div>
+        </div>
+
+        <div class="feeling-stressed-talk-container">
+            <span class="feeling-stressed-talk-container1">
+                <p class="feeling-stressed">Feeling Stressed?</p>
+                <p class="feeling-stressed">Talk to an AI Assistant</p>
+            </span>
+        </div>
+
+        <div class="tap-to-talk">Tap to Talk</div>
+
+        <form action="/talk_to_ai" method="POST">
+            <button type="submit" class="mic-button" aria-label="Tap to Talk to AI Assistant">
+                <img src="/Mic Button.svg" alt="Microphone Icon" class="mic-button-icon" />
+            </button>
+        </form>
+    </div>
+
+    <!-- Navigation Scripts -->
+    <script>
+        document.getElementById("tabResources")?.addEventListener("click", function () {
+            window.location.href = "/resources";
+        });
+
+        document.getElementById("tabResources1")?.addEventListener("click", function () {
+            window.location.href = "/support_groups";
+        });
+
+        document.getElementById("tabResources2")?.addEventListener("click", function () {
+            window.location.href = "/support_forums";
+        });
+    </script>
+    <script>
+        const form = document.querySelector('form[action="/talk_to_ai"]');
+        const micButton = form.querySelector('button.mic-button');
+        let mediaRecorder;
+        let audioChunks = [];
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault(); // prevent actual form submission
+
+            if (micButton.dataset.recording === 'true') {
+            // Stop recording
+            mediaRecorder.stop();
+            micButton.dataset.recording = 'false';
+            micButton.disabled = true; // disable while processing
+            micButton.querySelector('img').style.filter = 'grayscale(0)'; // reset icon style
+
+            } else {
+            // Start recording
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                audioChunks = [];
+
+                mediaRecorder.ondataavailable = event => audioChunks.push(event.data);
+
+                mediaRecorder.onstop = async () => {
+                const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                const formData = new FormData();
+                formData.append('audio', audioBlob, 'recording.webm');
+
+                // Send audio to backend
+                const response = await fetch('/talk_to_ai', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+                alert('Server says: ' + (result.message || 'No response'));
+
+                micButton.disabled = false;
+                micButton.querySelector('img').style.filter = 'grayscale(0)';
+                };
+
+                mediaRecorder.start();
+                micButton.dataset.recording = 'true';
+                micButton.querySelector('img').style.filter = 'grayscale(1)'; // visually indicate recording
+            } catch (err) {
+                alert('Microphone access denied or error: ' + err.message);
+            }
+            }
+        });
+        </script>
+
+</body>
+</html>

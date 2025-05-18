@@ -16,7 +16,7 @@ body {
     overflow: hidden;
 }
 h1 {
-    background-color: #007acc;
+    background-color: #A0C1BB;
     color: white;
     margin: 0;
     padding: 15px;
@@ -34,7 +34,7 @@ h1 {
     border-radius: 5px;
 }
 button {
-    background-color: #007acc;
+    background-color: #A0C1BB;
     color: white;
     border: none;
     padding: 10px;
@@ -43,7 +43,7 @@ button {
     transition: background-color 0.3s ease;
 }
 button:hover {
-    background-color: #005f99;
+    background-color: #4ec2ad;
 }
 #posts {
     border-top: 1px solid #eee;
@@ -56,16 +56,9 @@ button:hover {
 }
 .post h3 {
     margin: 0;
-    color: #007acc;
+    color: #A0C1BB;
+    font-family: Arial
 }
 .post p {
     margin: 5px 0 0 0;
-}
-#post-form {
-    position: sticky;   /* This makes it stick to the top when scrolling */
-    top: 0;             /* It stays at the very top */
-    z-index: 10;        /* Ensures it stays above other elements */
-    background-color: white;
-    padding: 15px;
-    border-bottom: 1px solid #eee;
 }

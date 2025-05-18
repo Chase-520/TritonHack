@@ -8,7 +8,7 @@ class Gemini:
     def generate_text(self, prompt: str, model: str = "gemini-2.0-flash") -> str:
         response = self.client.models.generate_content(
             model=model,
-            contents=f"Role play as a mental health doctor, respond to the following user input: {prompt}",
+            contents=f"Role play as a mental health doctor, respond to the following user input, 2 sentences max: {prompt}",
         )
         return response.text
 

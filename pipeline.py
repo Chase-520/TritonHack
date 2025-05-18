@@ -1,11 +1,13 @@
 from speechToText import LiveSpeechToText
 from chatbot import Gemini
+from textToSpeech import TextToSpeech
 
 
 class Pipeline:
     def __init__(self):
         self.listener = LiveSpeechToText()
         self.chatbot = Gemini()
+        self.talker = TextToSpeech()
 
     def start_listening(self):
         self.listener.start()
@@ -18,6 +20,7 @@ class Pipeline:
                 print(f"[Pipeline] Received: {sentence}")
                 response = self.chatbot.generate_text(sentence)
                 print(f"[Pipeline] Response: {response}")
+                self.talker.speak(response)
 
     def start(self):
         self.run()

@@ -1,0 +1,93 @@
+.union-icon {
+  	position: relative;
+  	width: 292px;
+  	height: 141px;
+}
+.resources {
+  	position: absolute;
+  	width: 94.46%;
+  	top: 50.31%;
+  	left: 0.65%;
+  	letter-spacing: -0.03em;
+  	line-height: 100%;
+  	display: flex;
+  	align-items: center;
+  	justify-content: center;
+}
+.tab-resources {
+  	width: 307px;
+  	position: relative;
+  	filter: drop-shadow(5px 10px 3px #563c8b);
+  	height: 159px;
+  	cursor: pointer;
+}
+.tab-resources-parent {
+  	align-self: stretch;
+  	display: flex;
+  	flex-direction: row;
+  	align-items: center;
+  	justify-content: flex-end;
+  	gap: 29px;
+  	color: #b855c5;
+}
+.feeling-stressed {
+  	margin: 0;
+}
+.feeling-stressed-talk-container1 {
+  	width: 100%;
+}
+.feeling-stressed-talk-container {
+  	width: 1563px;
+  	position: relative;
+  	font-size: 100px;
+  	letter-spacing: -0.03em;
+  	line-height: 100%;
+  	display: flex;
+  	align-items: center;
+  	height: 198px;
+  	flex-shrink: 0;
+}
+.tap-to-talk {
+  	width: 1563px;
+  	position: relative;
+  	font-size: 50px;
+  	letter-spacing: -0.03em;
+  	line-height: 100%;
+  	display: flex;
+  	align-items: center;
+  	justify-content: center;
+  	height: 198px;
+  	flex-shrink: 0;
+}
+.mic-button-icon {
+  	width: 160.9px;
+  	position: relative;
+  	height: 160.9px;
+}
+.frame-parent {
+  	width: 100%;
+  	position: relative;
+  	height: 758px;
+  	display: flex;
+  	flex-direction: column;
+  	align-items: center;
+  	justify-content: center;
+  	gap: 10px;
+  	text-align: center;
+  	font-size: 30px;
+  	color: #7e57c2;
+  	font-family: Comfortaa;
+}
+.mic-button {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+.mic-button-icon {
+    width: 80px;  /* adjust size as needed */
+    height: auto;
+}
+
+

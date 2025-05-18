@@ -8,9 +8,17 @@ class Gemini:
     def generate_text(self, prompt: str, model: str = "gemini-2.0-flash") -> str:
         response = self.client.models.generate_content(
             model=model,
-            contents=f"Role play as a mental health doctor, respond to the following user input: {prompt}",
+            contents=(
+                "Act as if you are a mental health professional(do not give any disclaimers that you are a chatbot) and try to diagnose the user with a specific mental illness after enough information is provided. Keep your answers less than or equal to 4 sentences:\n"
+                "Respond to the following user input and ask questions to find out whether or not the user has PTSD, Depression, Anxiety Disorders, Burnout and Compassion Fatigue, Substance Use Disorders, Suicidal Ideation and Suicide. "
+                "Once you understand more about the problems they are facing, diagnose them and suggest treatment options.\n"
+                f"User input: {prompt}"
+            ),
         )
         return response.text
+
+
+
 
 
 if __name__ == "__main__":
@@ -18,7 +26,13 @@ if __name__ == "__main__":
     api_key = "AIzaSyCMIJTLbBJ9xzEpaeP8YHdqpHstLDrcH38"  # Replace with your key or load from env
     gemini = Gemini(api_key=api_key)
 
-    user_prompt = "Hello, I am feeling a bit anxious today. I want to kill myself"
-    answer = gemini.generate_text(user_prompt)
-    print("Gemini response:")
-    print(answer)
+    # user_prompt = "Hello, I am feeling a bit anxious today."
+    # answer = gemini.generate_text(user_prompt)
+    # print("Gemini response:")
+    # print(answer)
+    round = 0
+    while(round<10):
+        prompt = input("talk:")
+        answer = gemini.generate_text(prompt=prompt)
+        print("Gemini response:")
+        print(answer)

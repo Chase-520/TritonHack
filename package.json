@@ -1,0 +1,24 @@
+{
+  "name": "tritonhack",
+  "version": "1.0.0",
+  "description": "install gemini with `pip install -q -U google-genai`",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Chase-520/TritonHack.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Chase-520/TritonHack/issues"
+  },
+  "homepage": "https://github.com/Chase-520/TritonHack#readme",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}

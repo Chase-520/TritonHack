@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="initial-scale=1, width=device-width" />
+  <title>Home Page</title>
+
+  <!-- Google Fonts -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400&display=swap" />
+
+  <!-- Local CSS -->
+  <link rel="stylesheet" href="/style/HomePage.css" />
+</head>
+<body style="background-color: #EFB9E9;">
+  <div class="frame-parent">
+    <div class="tab-resources-parent">
+      <div class="tab-resources" onclick="location.href='/resources'">
+        <img class="union-icon" src="/Union.svg" alt="Resources Icon" />
+        <div class="resources">Resources</div>
+      </div>
+    </div>
+
+    <div class="feeling-stressed-talk-container">
+      <span class="feeling-stressed-talk-container1">
+        <p class="feeling-stressed">Feeling Stressed?</p>
+        <p class="feeling-stressed">Talk to an AI Assistant</p>
+      </span>
+    </div>
+
+    <form action="/talk-to-ai" method="POST">
+      <button type="submit" style="all: unset; cursor: pointer;">
+        <img class="mic-button-icon" alt="Mic Button" src="/Mic%20Button.svg" />
+      </button>
+    </form>
+  </div>
+</body>
+</html>
